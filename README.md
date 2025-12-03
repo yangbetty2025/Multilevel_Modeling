@@ -1,116 +1,107 @@
-# The Hacker theme
+# Multilevel Modeling with Python
+## Description
+This is a step-by-step demonstration on how to conduct a multilevel regression analysis using Python to investigate (1) the effects of Heat Vulnerability Index (HVI) and the median age of a given neighborhood in New York City on the percentage of adults in that neighborhood with poor physical health, and (2) whether those effects differ for each of the five boroughs.<br>
+<br>
+Starting from demonstrating the need to use multilevel modeling for hierarchical data, this project aims to showcase a variety of tools offered by Python libraries for data extraction, manipulation,  visualization, statistical modeling and analysis. <br> 
 
-[![.github/workflows/ci.yaml](https://github.com/pages-themes/hacker/actions/workflows/ci.yaml/badge.svg)](https://github.com/pages-themes/hacker/actions/workflows/ci.yaml) [![Gem Version](https://badge.fury.io/rb/jekyll-theme-hacker.svg)](https://badge.fury.io/rb/jekyll-theme-hacker)
+## Rationale
+In light of climate change, some areas are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that are disproportionately impacted by heat (e.g., older adults, outdoor workers, and with lower income).<br>
+<br>
+It is often observed that areas in close spatial proximity tend to share similar characteristics, thus forming "clusters/groups" and motivating researchers to conduct multilevel regressions to investigate both the within-group and between-group effects of risk factors on health outcome. <br>
+<br>
+In this study, the health outcome (the dependent variable *Y*) is the percentage of adults with poor physical health residing in a given zip code, while the two predictor variables—HVI and median age for each zip code—have a hierarchical structure in the sense that each zip code belongs to one of the five boroughs.  
 
-*Hacker is a Jekyll theme for GitHub Pages. You can [preview the theme to see what it looks like](http://pages-themes.github.io/hacker), or even [use it today](#usage).*
+## Workflow
+**Step 1: Understanding a Multilevel Regression Model**<br>
+•	For an overview on multilevel regressions: [Multilevel Modeling: A Comprehensive Guide for Data Scientists](https://www.datacamp.com/tutorial/multilevel-modeling) <br>
+•	For an example of how to conduct a multilevel regression using Python: [Advanced Statistics: Multilevel Regression](https://advstats.psychstat.org/python/multilevel/index.php) <br>
+For explanation on grand mean centering vs. cluster mean centering: [Centering Options and Interpretations](https://www.learn-mlms.com/08-module-8.html) <br>
+•	
+<br>
+**Step 2: Data Extraction / Manipulation** <br>
+This analysis uses three datasets that have been extracted and cleaned: <br>
+**df01** Health Outcomes by Zip Code ( 'df01_health_by_Zip.csv').<br>
+**df02** Averaged Heat Vulnerability (HVI) by Zip Code ('df02_HVI_Averages.csv').<br>
+**df03** Risk Factors by Zip Code ('Data_by_Zip.csv').<br>
+The *pandas* library was used for: <br>
+•	Merging data frames <br>
+•	Dropping Na values <br>
+•	Sorting values <br>
+•	Querying (filtering) rows <br>
+•	Grouping subsets <br>
+•	Transforming subsets to find the cluster mean <br>
 
-![Thumbnail of Hacker](thumbnail.png)
+**Step 3: Data Visualization** <br> 
+These libraries: *numpy*,  *matplotlib.pyplot*, MaxNLocator  from *matplotlib.ticker*,  and *seaborn*  were used to create the following visualizations: <br>
+•	Single-color scatter plot to show the relationship between *Percentage of Residents with Poor Physical Health* (health outcome) and average *HVI* (predictor) for each zip code. <br>
+<br>
+•	Single-color scatter plot to show the relationship between Percentage of Residents with Poor Physical Health (health outcome) and *Median Age* (predictor) for each zip code. <br>
+<br>
+•	Multicolor scatter plots (one color for each borough) with a matching color regression line for each cluster of data points to show the relationship between *Percentage of Residents with Poor Physical Health* (health outcome) and average *HVI* (predictor) for each zip code. <br>
+<br>
+•	Multicolor scatter plots (one color for each borough) with a matching color linear regression line for each cluster of data points to show the relationship between *Percentage of Residents with Poor Physical Health* (health outcome) and *Median Age* (predictor) for each zip code. <br>
+<br>
+It is visually evident from the multicolor scatter plots that each borough forms a **cluster**, which supports the use of multilevel regression over regular (single level) regression. <br>
+<br>
+We can see that there is a **positive  relationship** between **Percentage of Residents with Poor Physical Health** and average **HVI** for each zip code. Namely, the higher the Heat Vulnerability Index, the higher the percentage of residents with poor physical health. <br>
+<br>
+It is worth noting that, for the multilevel regression, both predictors  (average *HVI* and *Median Age*) were **cluster-mean centered**, which means the arithmetic means of HVI and Median Age for each cluster (borough) were subtracted from each observation’s HVI and Median Age values, respectively, in the corresponding borough. <br>
+<br>
+Mean centering is a technique used in linear regression models when predictors do not have meaningful zero points. In this study, neither *Median Age* nor *HVI* have meaningful zero points because, without centering, the y-intercept would represent the average percentage of residents with poor physical health when the median age of those residents is 0 years old. Similarly, because Heat Vulnerability Index ranges from 1 to 5, without centering it, the y-intercept would represent the average percentage of residents with poor physical health when HVI is zero, which is out of range for the index. <br>
+<br>
+**Step 4: Data Analysis**<br>
+Libraries used for data analysis were: *statsmodels.api* and *statsmodels.formula.api*. <br>
+<br>
+•	First, a **null model** was specified to see if there is significant clustering or group-level variation in the data that justifies using a multilevel model instead of a standard regression. <br>
+<br>
+•	Using the statistics from the null model, in can compute the intraclass correlation coefficient (**ICC**). If ICC > 0.1, one should consider the use of a multilevel model. In this study, the ICC = 0.46, which supports the use of multilevel modeling. <br>
+<br>
+•	Finally, a multilevel model (mixed effects linear model) is specified to investigate fixed effects and random effects of the predictor variables. <br>
+<br>
+**Step 5: Interpretations of Results**<br>
+Given the *F*-statistics from model results, **HVI** is a **significant predictor** both in slope and intercept, while Median Age is not. <br>
+A regression line plot of varying intercepts and slopes for different boroughs serves as a visual illustration that the relationship between poor physical health and HVI (while holding median age constant) is *not fixed*, but rather, borough dependent. <br>
 
-## Usage
+## Further Uses
+One can use the same model to investigate on two other health outcomes: percentage of adults with poor mental health (*PoorMentalHealthPercent*) and percentage of adults with high blood pressure (*HighBPPercent*) residing in the area with a given zip code. The data for these two dependent variables are included in the “df03_Heath_Outcomes.csv” dataset. <br>
+<br>
+Additionally, one can choose to use the following predictors included in the “df02_Data_by-Zip.csv” dataset: *PercentCollege*, *PercentMale*, *PercentMarried*, *PercentWhite*, *PercentBlack*, *PercentAsian*, and *PercentOtherRaces*. <br>
+<br>
+For example, by using *PercentCollege* and *PercentMarried* as predictors (*X*’s) and *PercentHighBP* as the health outcome (*Y*), one can investigate the effects of education and marital status of the residents of a given neighborhood in New York City on the percentage of adults in that neighborhood with poor mental health, and (2) whether those effects differ for each of the five boroughs.<br> 
+<br>
+## Files List
+**df01_Health_by_Zip.csv** (extracted from [Data Commons](https://datacommons.org/place/geoId/3651000?category=Health)) contains the following columns as health outcomes:<br>
+•	*Zip*: five-digit zip codes used in NYC. <br>
+•	*PoorPhysicalHealthPercent*: percentage of adult population with poor physical health residing in the area of the zip code. <br>
+•	*PoorMentalHealthPercent*: percentage of adult population with poor mental health residing in the area of the zip code. <br>
+•	*HighBPPercent*: percentage of adult population with high blood pressure residing in the area of the zip code. <br>
+<br>
+**df02_HVI_Averages.csv** (extracted from [NYC Data Portal: Heat Vulnerability Index]( https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)) contains the following columns:<br>
+•	*Zip*: five-digit zip codes used in NYC <br>
+•	*Borough*: BX (Bronx), BK (Brooklyn), MN (Manhattan), QN (Queens), and SI (Station Island). <br>
+•	*avgHVI*: Heat Vulnerability Index ranking from 1 to 5, with 1 indicating the associated neighborhood being least vulnerable and 5 the most vulnerable. Four factors were used in calculating the HVI for each neighborhood: (i) daytime summer surface *temperature*, (ii) availability of *air conditioning*, (iii) amount of *green space*, and (iv) *median income* as a proxy for the likelihood of being able to afford air conditioning.  <br>
+Some zip codes span over multiple neighborhoods. In this case, a simple average of HVI is taken for those zip codes to create this *avgHVI* variable. <br>
+<br>
+**df03_Data_by-Zip.csv** contains the following columns:<br>
+•	[MedianAge]( https://simplemaps.com/city/new-york/zips/age-median): The age of the median resident in the area of the zip code. <br>
+•	[PercentCollege]( https://simplemaps.com/city/new-york/zips/education-college-or-above): The percentage of residents with at least a 4-year degree resident in the area of the zip code. <br>
+•	[PercentMale]( https://simplemaps.com/city/new-york/zips/male): The percentage of residents who report being male resident in the area of the zip code. <br>
+•	[PercentMarried]( https://simplemaps.com/city/new-york/zips/married): The percentage of residents who report being married resident in the area of the zip code. <br>
+•	[PercentWhite]( https://simplemaps.com/city/new-york/zips/race-white): The percentage of residents who report their race White resident in the area of the zip code. <br>
+•	[PercentBlack]( https://simplemaps.com/city/new-york/zips/race-black): The percentage of residents who report their race as Black or African American resident in the area of the zip code. <br>
+•	[PercentAsian]( https://simplemaps.com/city/new-york/zips/race-asian): The percentage of residents who report their race as Asian resident in the area of the zip code. <br>
+•	PercentOtherRaces: The percentage of residents who did not report their race White, Black, or Asian resident in the area of the zip code. It was calculated by subtracting PercentWhite, PercentBlack, and Percent Asian from 100 percent. <br>
+<br>
+**HVI_Map_NYC.png** is a map of Heat Vulnerability Index for different neighborhoods in New York City from [NYC Data Portal: Heat Vulnerability Index]( https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/) <br>
+<br>
+**Scatterplots_HVI_on_Poor_Health.png** is a visual juxtaposition of single-color vs. multicolor scatter plot where each color represents a borough. It shows the relationship between HVI and the percentage of residents with poor physical health. <br>
+<br>
+**Scatterplots_MedianAge_on_Poor_Health.png** is a visual juxtaposition of single-color vs. multicolor scatter plot where each color represents a borough. It shows the relationship between median age and the percentage of residents with poor physical health. <br>
+<br>
+**Linear_Regression_by_Cluster.png** shows the relationship between the health outcome (*Percentage of Residents with Poor Physical Health*) and a single predictor (either *HVI* or *Median Age*) from simple linear (ordinary least squares) models. <br>
+<br>
+**Regression_Lines_Multilevel.png** shows the relationship between (cluster-mean centered) *HVI* and *Percentage of Residents with Poor Physical Health* while holding *Median Age* constant. Each borough is shown in a different color to highlight the varying intercepts and slopes of the different regression lines for different boroughs. <br>
+<br>
+**YANG_Final_Project.ipynb** is a python notebook with step-by-step notes and Python codes for completing this project. <br>
 
-To use the Hacker theme:
 
-1. Add the following to your site's `_config.yml`:
-
-    ```yml
-    remote_theme: pages-themes/hacker@v0.2.0
-    plugins:
-    - jekyll-remote-theme # add this line to the plugins list if you already have one
-    ```
-
-2. Optionally, if you'd like to preview your site on your computer, add the following to your site's `Gemfile`:
-
-    ```ruby
-    gem "github-pages", group: :jekyll_plugins
-    ```
-
-## Customizing
-
-### Configuration variables
-
-Hacker will respect the following variables, if set in your site's `_config.yml`:
-
-```yml
-title: [The title of your site]
-description: [A short description of your site's purpose]
-```
-
-Additionally, you may choose to set the following optional variables:
-
-```yml
-show_downloads: ["true" or "false" (unquoted) to indicate whether to provide a download URL]
-google_analytics: [Your Google Analytics tracking ID]
-```
-
-### Stylesheet
-
-If you'd like to add your own custom styles:
-
-1. Create a file called `/assets/css/style.scss` in your site
-2. Add the following content to the top of the file, exactly as shown:
-    ```scss
-    ---
-    ---
-
-    @import "{{ site.theme }}";
-    ```
-3. Add any custom CSS (or Sass, including imports) you'd like immediately after the `@import` line
-
-*Note: If you'd like to change the theme's Sass variables, you must set new values before the `@import` line in your stylesheet.*
-
-### Layouts
-
-If you'd like to change the theme's HTML layout:
-
-1. For some changes such as a custom `favicon`, you can add custom files in your local `_includes` folder. The files [provided with the theme](https://github.com/pages-themes/hacker/tree/master/_includes) provide a starting point and are included by the [original layout template](https://github.com/pages-themes/hacker/blob/master/_layouts/default.html).
-2. For more extensive changes, [copy the original template](https://github.com/pages-themes/hacker/blob/master/_layouts/default.html) from the theme's repository<br />(*Pro-tip: click "raw" to make copying easier*)
-3. Create a file called `/_layouts/default.html` in your site
-4. Paste the default layout content copied in the first step
-5. Customize the layout as you'd like
-
-### Customizing Google Analytics code
-
-Google has released several iterations to their Google Analytics code over the years since this theme was first created. If you would like to take advantage of the latest code, paste it into `_includes/head-custom-google-analytics.html` in your Jekyll site.
-
-### Overriding GitHub-generated URLs
-
-Templates often rely on URLs supplied by GitHub such as links to your repository or links to download your project. If you'd like to override one or more default URLs:
-
-1. Look at [the template source](https://github.com/pages-themes/hacker/blob/master/_layouts/default.html) to determine the name of the variable. It will be in the form of `{{ site.github.zip_url }}`.
-2. Specify the URL that you'd like the template to use in your site's `_config.yml`. For example, if the variable was `site.github.url`, you'd add the following:
-    ```yml
-    github:
-      zip_url: http://example.com/download.zip
-      another_url: another value
-    ```
-3. When your site is built, Jekyll will use the URL you specified, rather than the default one provided by GitHub.
-
-*Note: You must remove the `site.` prefix, and each variable name (after the `github.`) should be indent with two space below `github:`.*
-
-For more information, see [the Jekyll variables documentation](https://jekyllrb.com/docs/variables/).
-
-## Roadmap
-
-See the [open issues](https://github.com/pages-themes/hacker/issues) for a list of proposed features (and known issues).
-
-## Project philosophy
-
-The Hacker theme is intended to make it quick and easy for GitHub Pages users to create their first (or 100th) website. The theme should meet the vast majority of users' needs out of the box, erring on the side of simplicity rather than flexibility, and provide users the opportunity to opt-in to additional complexity if they have specific needs or wish to further customize their experience (such as adding custom CSS or modifying the default layout). It should also look great, but that goes without saying.
-
-## Contributing
-
-Interested in contributing to Hacker? We'd love your help. Hacker is an open source project, built one contribution at a time by users like you. See [the CONTRIBUTING file](docs/CONTRIBUTING.md) for instructions on how to contribute.
-
-### Previewing the theme locally
-
-If you'd like to preview the theme locally (for example, in the process of proposing a change):
-
-1. Clone down the theme's repository (`git clone https://github.com/pages-themes/hacker`)
-2. `cd` into the theme's directory
-3. Run `script/bootstrap` to install the necessary dependencies
-4. Run `bundle exec jekyll serve` to start the preview server
-5. Visit [`localhost:4000`](http://localhost:4000) in your browser to preview the theme
-
-### Running tests
-
-The theme contains a minimal test suite, to ensure a site with the theme would build successfully. To run the tests, simply run `script/cibuild`. You'll need to run `script/bootstrap` once before the test script will work.
