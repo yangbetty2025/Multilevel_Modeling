@@ -2,10 +2,29 @@
 layout: default
 ---
 
+# What are multilevel models?
+Some data have a **hierarchical** or **clustered** structure. For example, children who grew up in the same households with the same parents tend to be more alike than random individuals from the same age groups. <br>
+<br>
+Similarly, students from the same school or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
+<br>
+![school_student-hierarchy](yangbetty2025/Multilevel_Modeling/images/school_student_hierarchy.png)
+
+
+
+
+<br>
+# Why use multilevel models?
+
+
+
+
+
+
 
 ### Small image
 
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
+![Octocat](https://github.dev/yangbetty2025/Multilevel_Modeling/images/school_student_hierarchy.png)
+
 
 ### Large image
 
