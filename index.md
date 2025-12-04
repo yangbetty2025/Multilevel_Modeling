@@ -7,6 +7,7 @@ Some data have a **hierarchical** or **clustered** structure. For example, child
 <br>
 Similarly, students from the same school or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
 <br>
+<div style="width:50%; margin: auto;">
 ![data-hierarchy](assets/images/data_hierarchy.png)
 
 
