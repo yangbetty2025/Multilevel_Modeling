@@ -12,12 +12,12 @@ Similarly, students from the same school or neighborhoods may perform more simil
 <br>
 
 # Why use multilevel models?
-1. Nested data *violate key assumptions* of Ordinary Least Squares (OLS) in linear regression, because: <br>
+1. Nested data **violate key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
 * Observations are not independent <br>
 * Error terms are not independent <br>
 <br>
 
-2. Some *data structures* that do not appear to be clustered can actually be. Here is an extreme example:<br>
+2. Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
  ![data-structure](assets/images/data-structure.png)
  <sub> Source: "A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam </sub>
  <br>
@@ -30,7 +30,7 @@ Similarly, students from the same school or neighborhoods may perform more simil
 <br>
 <br>
 
-# The research question and rationale
+# The research question and rationale 
 Are Heat Vulnerability Index (HVI) and poor mental health related to the physical health of adults residing in New York City? Do those relationships differ depending on the borough? <br>
 
 In light of climate change, some areas are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that are disproportionately impacted by heat (e.g., older adults, outdoor workers, and those with lower income). <br>
@@ -39,8 +39,8 @@ It is often observed that areas in close spatial proximity tend to share similar
 <br>
 <br>
 
-# Datasets, health outcome and predictors
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are average **HVI** and percentage of adults with **poor mental health**, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
+# Datasets, health outcome and predictor variables
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** and percentage of adults with **poor mental health**, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
 <br>
 This analysis will use three datasets that have been extracted from their linked sources and preprocessed: <br>
 * [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
@@ -50,3 +50,8 @@ This analysis will use three datasets that have been extracted from their linked
 <br>
 
 # Data visualization: scatter plots & regression lines
+It is always a good idea to visualize the data before modeling to identify patterns, trends, and outliers that are not apparent in raw numbers.<br> 
+<br>
+In this study, an **outlier** (zip code 11005) was detected because the median age of residents is 80.6 years old. Upon further investigation, this zip code contains only a senior center. This data point was removed from the analysis dataset.<br>
+<br>
+
