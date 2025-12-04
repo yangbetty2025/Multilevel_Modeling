@@ -11,17 +11,21 @@ Similarly, students from the same school or neighborhoods may perform more simil
 <br>
 
 ## Why use multilevel models?
-Nested data violate key assumptions of Ordinary Least Squares (OLS) in linear regression, because: <br>
+1. Nested data **violate key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
 * Observations are not independent <br>
 * Error terms are not independent <br>
 <br>
-Also, some data structures that do not appear to be clustered can actually be. Here is an extreme example:<br>
+
+2. Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
  ![data-structure](assets/images/data-structure.png)
- 
- Source: [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#14)
+ Source: ["A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam](https://favstats.github.io/intro_multilevel/slides/#14)
  <br>
 
-
+Below is a list of helpful resources for getting a basic understanding on multilevel modeling: <br>
+* [Multilevel Modeling: A Comprehensive Guide for Data Scientists](https://www.datacamp.com/tutorial/multilevel-modeling)<br>
+* [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#1)<br>
+* [Advanced Statistics: Multilevel Regression](https://advstats.psychstat.org/python/multilevel/index.php)
+* [Centering Options and Interpretations](https://www.learn-mlms.com/08-module-8.html)<br>
 
 
 
