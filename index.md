@@ -7,7 +7,7 @@ Some data have a **hierarchical** or **clustered** structure. For example, child
 <br>
 Similarly, students from the same school or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
 <br>
-![data-hierarchy](assets/images/data_hierarchy.png)
+![data_hierarchy](assets/images/data_hierarchy.png)
 <br>
 <br>
 
@@ -18,7 +18,7 @@ Similarly, students from the same school or neighborhoods may perform more simil
 <br>
 
 2. Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
- ![data-structure](assets/images/data-structure.png)
+ ![data_structure](assets/images/data_structure.png)
  <sub> Source: "A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam </sub>
  <br>
  <br>
@@ -39,19 +39,34 @@ It is often observed that areas in close spatial proximity tend to share similar
 <br>
 <br>
 
-# Datasets, health outcome and predictor variables
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** and percentage of adults with **poor mental health**, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
+# Health outcome, predictors, model structure, and datasets
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** by zip code and the **poverty rate** of each borough, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
 <br>
-This analysis will use three datasets that have been extracted from their linked sources and preprocessed: <br>
+In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **poverty rate** of each borough).<br>
+<br>
+This analysis will use four datasets that have been extracted from their linked sources and preprocessed: <br>
 * [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
 * [Averaged Heat Vulnerability (HVI) by Zip Cod](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)<br>
 * [Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
+* [Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br> 
 <br>
 <br>
 
 # Data visualization: scatter plots & regression lines
 It is always a good idea to visualize the data before modeling to identify patterns, trends, and outliers that are not apparent in raw numbers.<br> 
 <br>
-In this study, an **outlier** (zip code 11005) was detected because the median age of residents is 80.6 years old. Upon further investigation, this zip code contains only a senior center. This data point was removed from the analysis dataset.<br>
+In this study, an **outlier** (zip code 11005) was detected because of its extremely high median age of residents (80.6 years old). Upon further investigation, zip code 11005 contains only one senior center. This data point was removed from the analysis dataset as a result.<br>
 <br>
-
+The following unicolor scatter plot indicates a **positive** relationship between averaged **HVI** and **poor physical health**, while the multicolor scatter plot further reveals **clusters** of data points by borough. <br>
+ ![HVI_scatterplots](assets/images/HVI_scatterplots.png)
+<br>
+<br>
+Similarly, the unicolor scatter plot below shows a **positive** relationship between **poverty rate** and **poor physical health**. There is a "clustering effect" by default, as all zip codes from the same borough share the same poverty rate.<br>
+ ![Poverty_scatterplots](assets/images/Poverty_scatterplots.png)
+<br>
+<br>
+Conducting an OLS linear regression on the entire dataset, one would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. However, when the same regression is conducted separately for each borough, five district y-intercepts and slopes emerge, supporting the use of a multilevel model.
+<br>
+ ![HVI_regression_lines](assets/images/HIV_regression_lines.png)
+<br>
+<br>
