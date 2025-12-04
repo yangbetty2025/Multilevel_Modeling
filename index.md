@@ -15,7 +15,7 @@ Nested data violate key assumptions of Ordinary Least Squares (OLS) in linear re
 * Observations are not independent <br>
 * Error terms are not independent <br>
 <br>
-Also, some data structures that do not appear to be clustered can actually be. Here is an extreme example:
+Also, some data structures that do not appear to be clustered can actually be. Here is an extreme example:<br>
  ![data-structure](assets/images/data-structure.png)
  
  Source: [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#14)
