@@ -10,6 +10,9 @@ Similarly, students from the same school or neighborhoods may perform more simil
 ![data_hierarchy](assets/images/data_hierarchy.png)
 <br>
 <br>
+It is also possible to construct a three-level model where Level 1 is areas of each zip code, Level 2 is neighborhoods, and Level 3 is boroughs. The illustration below uses "UHF42 neighborhoods," which are a set of 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning.<br>
+<br>
+![three_level_structure](assets/images/three_level_structure.png)
 
 # Why use multilevel models?
 1. Nested data **violate key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
@@ -31,24 +34,25 @@ Similarly, students from the same school or neighborhoods may perform more simil
 <br>
 
 # The research question and rationale 
-Are Heat Vulnerability Index (HVI) and poor mental health related to the physical health of adults residing in New York City? Do those relationships differ depending on the borough? <br>
+Are Heat Vulnerability Index (HVI) and poor mental health related to the physical health of adults residing in New York City? Do those relationships differ depending on the neiborhood? <br>
 
-In light of climate change, some areas are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that are disproportionately impacted by heat (e.g., older adults, outdoor workers, and those with lower income). <br>
+In light of climate change, some neighborhoods are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that are disproportionately impacted by heat (e.g., older adults, outdoor workers, and those with lower income). <br>
 
 It is often observed that areas in close spatial proximity tend to share similar characteristics, thus forming "clusters/groups" and motivating researchers to conduct multilevel regressions to investigate both the within-group and between-group effects of risk factors on health outcome. <br>
 <br>
 <br>
 
 # Health outcome, predictors, model structure, and datasets
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** by zip code and the **poverty rate** of each borough, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF neighborhood, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
 <br>
-In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **poverty rate** of each borough).<br>
+In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older** of each UHF42 neighborhood).<br>
 <br>
-This analysis will use four datasets that have been extracted from their linked sources and preprocessed: <br>
+This analysis will use five datasets that have been extracted from their linked sources and preprocessed: <br>
 * [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
 * [Averaged Heat Vulnerability (HVI) by Zip Cod](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)<br>
 * [Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
 * [Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br> 
+* [UHF42 Neighborhood Codes](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)
 <br>
 <br>
 
@@ -57,25 +61,25 @@ It is always a good idea to visualize the data before modeling to identify patte
 <br>
 In this study, an **outlier** (zip code 11005) was detected because of its extremely high median age of residents (80.6 years old). Upon further investigation, zip code 11005 contains only one senior center. This data point was removed from the analysis dataset as a result.<br>
 <br>
-The following unicolor scatter plot indicates a **positive** relationship between averaged **HVI** and **poor physical health**, while the multicolor scatter plot further reveals **clusters** of data points by borough. <br>
+The following unicolor scatter plot indicates a **positive** relationship between averaged **HVI** and **poor physical health**, while the multicolor scatter plot further reveals **clusters** of data points at the borough level. <br>
 <br>
 
  ![HVI_scatterplots](assets/images/HVI_scatterplots.png)
 <br>
 <br>
-Similarly, the unicolor scatter plot below shows a **positive** relationship between **poverty rate** and **poor physical health**. There is a "clustering effect" by default, as all zip codes from the same borough share the same poverty rate.<br>
+Interestingly, the unicolor scatter plot below shows a negative relationship between percentage of **residents aged 65 and older** and **poor physical health**, which is contrary to what one might expect. There is a "clustering effect" by default, as all zip codes from the same borough share the percentage of residents aged 65 and older.<br>
 <br>
-![Poverty_scatterplots](assets/images/Poverty_scatterplots.png)
+![percentage65plus](assets/images/percentage65plus_scatterplots.png)
 <br>
 <br>
 Conducting an OLS linear regression on the entire dataset, one would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. However, when the same regression is conducted separately for each borough, five district y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
 <br>
-![HVI_regression_lines](assets/images/HIV_regression_lines.png)
+![HVI_regression_lines](assets/images/HVI_regression_lines.png)
 <br>
 <br>
 
 # Data Analysis
-From data visualization, it appears that there are five distict y-intercepts and slopes; however, are their differences statistically significant? In other words, is there a standardized measurement we can use to justify using a multilevel model? <br>
+Visualization is an intuitive way to get the big picture (pun intended) of our data, but there a standardized measurement we can use to justify using a multilevel model. The measurement is called "intraclass correlation coefficient," or ICC for short. <br>
 <br>
 
 ## Intraclass correlation coefficient (ICC) 
@@ -83,11 +87,11 @@ Intraclass correlation coefficient (ICC) is a statistic that measures how strong
 <br>
 **ICC = Between-Group Variance / (Between-Group Variance + Within-Group Variance)**<br>
 <br>
-- When ICC = 1, there is no variance within the groups, meaning all variance comes from between groups. In contrast.<br>
+- When ICC = 0, there is no variance within the groups, meaning all variance comes from between groups. In contrast.<br>
 <br>
 - When ICC = 1, the varaiance between groups is zero, indicating "all groups are similar," which means the dataset contains no distinct grouping.<br>
 <br>
-- When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.46 means that 46% of total variance is due to differences between the groups. <br>
+- When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.78 means that 78% of total variance is due to differences between the groups. <br>
 <br>
 
 ## The null model
@@ -97,20 +101,20 @@ In regression, a null model is usually the simplest possible model involving onl
 <br> 
 First load the necessary libraries--the model we want to use is **mixed linear model**, or ***mixedlm***, from the ***statsmodel*** library.<br>
 <br>
-Specify the null model, fit the model, and then print out the results.
+Specify the null model, fit the model, and then print out the results. For our study, we will be conducting a two-level mixed linear regression, where the Level 2 groups are **UHF42** neighborhoods.<br>
 <br>
 ```
 import statsmodels.api as sm
 import statsmodels.formula.api as smf 
 
-null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=analysis_df, groups=analysis_df["Borough"])
+null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=analysis_df, groups=analysis_df["UHF42"])
+
 
 results_null = null_model.fit()
 print(results_null.summary())
 
 ```
 
-<br>
 <br>
 
 ![null_model_results](assets/images/null_model_results.png)
@@ -119,7 +123,15 @@ print(results_null.summary())
 
 Using the **Between-Group Variance** and the **Within-Group Variance** estimated by the model, we can now calculate the ICC: <br>
 
-**ICC = 5.381 / (5.381 + 6.1999) = 0.46**<br>
+**ICC** = Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
+= 7.958 /(7.958 +2.2614) = **0.78**<br>
 <br>
-
-
+<br>
+## Cluster-mean centering
+Centering the averaged HVI is necessary, because the index ranges from 1 to 5. Without centering averaged HVI, the y-intercept would represent the average percentage of adults with poor physical health when HVI is 0, which is not a valid index value. <br>
+<br>
+Other reasons for centering are to reduce multicollinearity and to simplify interpretations when interaction terms are included in the model.<br>
+<br>
+There are two options for centering in multilevel models, namely, grand-mean centering and cluster-mean centering. Since we are interested in the Level 2 predictor, **cluster-mean centering** is chosen because it gives an unbiased estimate of the within cluster effect and produces better estimates of the slope variance.<br>
+<br>
+## Two-level model specification
