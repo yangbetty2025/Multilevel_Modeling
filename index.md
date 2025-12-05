@@ -69,7 +69,7 @@ The following unicolor scatter plot indicates a **positive** relationship betwee
 <br>
 Interestingly, the unicolor scatter plot below shows a negative relationship between percentage of **residents aged 65 and older** and **poor physical health**, which is contrary to what one might expect. There is a "clustering effect" by default, as all zip codes from the same borough share the percentage of residents aged 65 and older.<br>
 <br>
-![percentage65plus](assets/images/percentage65plus_scatterplots.png)
+![percent65plus](assets/images/percent65plus_scatterplots.png)
 <br>
 <br>
 Conducting an OLS linear regression on the entire dataset, one would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. However, when the same regression is conducted separately for each borough, five district y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
@@ -108,7 +108,6 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf 
 
 null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=analysis_df, groups=analysis_df["UHF42"])
-
 
 results_null = null_model.fit()
 print(results_null.summary())
