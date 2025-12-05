@@ -58,15 +58,68 @@ It is always a good idea to visualize the data before modeling to identify patte
 In this study, an **outlier** (zip code 11005) was detected because of its extremely high median age of residents (80.6 years old). Upon further investigation, zip code 11005 contains only one senior center. This data point was removed from the analysis dataset as a result.<br>
 <br>
 The following unicolor scatter plot indicates a **positive** relationship between averaged **HVI** and **poor physical health**, while the multicolor scatter plot further reveals **clusters** of data points by borough. <br>
+<br>
+
  ![HVI_scatterplots](assets/images/HVI_scatterplots.png)
 <br>
 <br>
 Similarly, the unicolor scatter plot below shows a **positive** relationship between **poverty rate** and **poor physical health**. There is a "clustering effect" by default, as all zip codes from the same borough share the same poverty rate.<br>
- ![Poverty_scatterplots](assets/images/Poverty_scatterplots.png)
+<br>
+![Poverty_scatterplots](assets/images/Poverty_scatterplots.png)
 <br>
 <br>
-Conducting an OLS linear regression on the entire dataset, one would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. However, when the same regression is conducted separately for each borough, five district y-intercepts and slopes emerge, supporting the use of a multilevel model.
+Conducting an OLS linear regression on the entire dataset, one would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. However, when the same regression is conducted separately for each borough, five district y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
 <br>
- ![HVI_regression_lines](assets/images/HIV_regression_lines.png)
+![HVI_regression_lines](assets/images/HIV_regression_lines.png)
 <br>
 <br>
+
+# Data Analysis
+From data visualization, it appears that there are five distict y-intercepts and slopes; however, are their differences statistically significant? In other words, is there a standardized measurement we can use to justify using a multilevel model? <br>
+<br>
+
+## Intraclass correlation coefficient (ICC) 
+Intraclass correlation coefficient (ICC) is a statistic that measures how strongly units in the same group are related. It is calculated as:<br>
+<br>
+**ICC = Between-Group Variance / (Between-Group Variance + Within-Group Variance)**<br>
+<br>
+- When ICC = 1, there is no variance within the groups, meaning all variance comes from between groups. In contrast.<br>
+<br>
+- When ICC = 1, the varaiance between groups is zero, indicating "all groups are similar," which means the dataset contains no distinct grouping.<br>
+<br>
+- When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.46 means that 46% of total variance is due to differences between the groups. <br>
+<br>
+
+## The null model
+To calculate the ICC, we must first run a **null model**, which is a baseline model that estimates the between-group variance and the within-group variance.<br>
+<br>
+In regression, a null model is usually the simplest possible model involving only an intercept (the mean value of Y) with no predictor variables. It represents a case where the predictors have no effect on the outcome (i.e., the risk factors studied do not impact the health outcome). If the variances are large under the null assumption, it means a more complex model involving predictors should be evaluated.<br> 
+<br> 
+First load the necessary libraries--the model we want to use is **mixed linear model**, or ***mixedlm***, from the ***statsmodel*** library.<br>
+<br>
+Specify the null model, fit the model, and then print out the results.
+<br>
+```
+import statsmodels.api as sm
+import statsmodels.formula.api as smf 
+
+null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=analysis_df, groups=analysis_df["Borough"])
+
+results_null = null_model.fit()
+print(results_null.summary())
+
+```
+
+<br>
+<br>
+
+![null_model_results](assets/images/null_model_results.png)
+<br>
+<br>
+
+Using the **Between-Group Variance** and the **Within-Group Variance** estimated by the model, we can now calculate the ICC: <br>
+
+**ICC = 5.381 / (5.381 + 6.1999) = 0.46**<br>
+<br>
+
+
