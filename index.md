@@ -107,7 +107,7 @@ Specify the null model, fit the model, and then print out the results. For our s
 import statsmodels.api as sm
 import statsmodels.formula.api as smf 
 
-null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=analysis_df, groups=analysis_df["UHF42"])
+null_model = smf.mixedlm("PoorPhysicalHealthPercent ~ 1", data=df, groups=df["UHF42"])
 
 results_null = null_model.fit()
 print(results_null.summary())
@@ -122,15 +122,102 @@ print(results_null.summary())
 
 Using the **Between-Group Variance** and the **Within-Group Variance** estimated by the model, we can now calculate the ICC: <br>
 
-**ICC** = Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
-= 7.958 /(7.958 +2.2614) = **0.78**<br>
+**ICC** = Between-Group Variance / Total Variance<br>
+= Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
+= 7.958 / (7.958 + 2.2614) = **0.78**<br>
 <br>
 <br>
+
 ## Cluster-mean centering
-Centering the averaged HVI is necessary, because the index ranges from 1 to 5. Without centering averaged HVI, the y-intercept would represent the average percentage of adults with poor physical health when HVI is 0, which is not a valid index value. <br>
+It is worth noting that, for this multilevel regression, the HVI predictor was cluster-mean centered (also known as group-mean centered). In other words, the arithmetic means of HVI for each cluster (UHF42 neighborhood) were subtracted from each observation’s HVI value in the corresponding neighborhood.<br>
 <br>
+
+Mean centering is a technique used in linear regression models when predictors do not have meaningful zero points. In this study, HVI has no meaningful zero  because Heat Vulnerability Index ranges from 1 to 5. Without centering it, the y-intercept would represent the average percentage of residents with poor physical health when HVI is zero, which is out of range for the index.<br>
+<br>
+
 Other reasons for centering are to reduce multicollinearity and to simplify interpretations when interaction terms are included in the model.<br>
 <br>
-There are two options for centering in multilevel models, namely, grand-mean centering and cluster-mean centering. Since we are interested in the Level 2 predictor, **cluster-mean centering** is chosen because it gives an unbiased estimate of the within cluster effect and produces better estimates of the slope variance.<br>
+
+
+There are two options for centering in multilevel models, namely, grand-mean centering and cluster-mean centering. Since we are interested in the Level 2 predictor, **cluster-mean centering** is chosen because it gives an unbiased estimate of the within-cluster effect and produces better estimates of the slope variance.<br>
 <br>
+<br>
+
+## Fixed effects vs. random effects
+In multilevel models, **fixed effects** focus on generalizable patterns and relationships (y-intercept and slope) that are assumed to be consistent across all groups of analysis.<br> 
+<br>
+In contrast, **random effects** capture group-specific variations by allowing for variability between groups and estimating parameters that can vary across the groups or clusters. There are two parameters for random effects:<br>
+* **Random intercept** estimate the variation in the baseline (intercept) between groups. For example, in this study, a random intercept would allow each neighborhood to have a unique average percentage of residents with poor health, reflecting differences in baseline performance across different neighborhoods. <br>
+<br>
+* **Random slope** capture the relationship between a predictor and the outcome across groups or clusters. If the effect of HVI on poor health varies from one neighborhood to another, this can be modeled with random slopes where each neighborhood will have its unique relationship (slope) between HVI and poor physical health. <br>
+<br>
+<br>
+## Fixed-effects model specification
+As mentioned earlier, the averaged HVI predictor is cluster-centered. The cluster means are represented by *mHVI<sub>j</sub>* for neighborhood *j*. <br>
+
+Conceptually, to get the **fixed-effects parameters**we specify the model as:<br>
+
+**Poor Health** = 𝛽<sub>0</sub> + 𝛽<sub>1</sub> ***mHVI<sub>j</sub>*** + 𝛽<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>j</sub>* + *e<sub>ij</sub>* <br>
+where *i* represents individual zip code and *j* UHF neighborhood.<br>
+<br>
+𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates we can extract from the output table.
+```
+model_fixedE = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus", data=df, groups=df["UHF42"])
+
+results_fixedE = model_fixedE.fit()
+
+print(results_fixedE.summary())
+```
+<br>
+![fixed_effects_results](assets/images/fixed_effects_results.png)<br>
+<br>
+
+Based on the output of the analysis, both **mHVI** and **Percent65plus** are significant given the Z-values in the results table.
+<br>
+
 ## Two-level model specification
+Conceptually, the two-level model can be specified as:<br>
+**Poor Health** = γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub> )* ∗ ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
+
+where **γ**s are **fixed-effects** and ***v<sub>0j</sub>*** and ***v<sub>1j</sub>*** are **random effects**<br>
+<br>
+In python, each term in the mixed-effects model needs to be specified except for *e<sub>ij</sub>*, which means there will be two interaction terms.<br> 
+<br>
+The random effects are specified using the option **re_formula = "~1 + HVI"** where 1 and HVI specify that the coefficients vary for the grouping variable (i.e., UHF42 neighborhoods).<br>
+<br>
+As a reminder, the HVI variable used for this model is cluster-mean centered, or HVI_CMC.<br>  
+<br>
+
+```
+model_2level = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus + HVI_CMC + mHVI*HVI_CMC + Percent65plus*HVI_CMC", data=df, groups=df["UHF42"], re_formula="~1 + HVI_CMC")
+
+results_2level = model_2level.fit()
+
+print(results_2level.summary())
+```
+![two_level_results](assets/images/two_level_results.png)<br>
+<br>
+
+The 
+
+# Interpretations of results
+
+
+![two_level_results](assets/images/multilevel_regression_lines.svg)
+<br>
+<br>
+
+# Future uses
+One can use the same model to investigate on two other **health outcomes**: percentage of adults with poor mental health (PoorMentalHealthPercent) and percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br> 
+<br>
+To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, BAdegreePercent, HomeownershipPercent. <br>
+<br>
+For example, by using BAdegreePercent (percentage of residents with a BA degree) and PercentMarried as predictors (X’s) and PercentHighBP as the health outcome (Y), one can investigate the effects of education level and marital status of the residents of a given neighborhood in New York City on the percentage of adults in that neighborhood with high blood pressure, and (2) whether those effects differ for each of the five boroughs. <br>
+<br>
+<br>
+Here is the [MLM_dataframe](assets/images/MLM_dataframe.csv) with all the variables mentioned above.
+<br>
+
+
