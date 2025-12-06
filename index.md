@@ -21,6 +21,7 @@ It is also possible to construct a three-level model where Level 1 is areas of e
 <br>
 
 2. Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
+<br>
  ![data_structure](assets/images/data_structure.png)
  <sub> Source: "A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam </sub>
  <br>
@@ -79,20 +80,22 @@ Conducting an OLS linear regression on the entire dataset, one would estimate a 
 <br>
 
 # Data Analysis
-Visualization is an intuitive way to get the big picture (pun intended) of our data, but there a standardized measurement we can use to justify using a multilevel model. The measurement is called "intraclass correlation coefficient," or ICC for short. <br>
+Visualization is an intuitive way to get the big picture (pun intended) of our data, but there is a standardized measurement we can use to justify using a multilevel model. The measurement is called "intraclass correlation coefficient," or **ICC** for short. <br>
 <br>
 
 ## Intraclass correlation coefficient (ICC) 
 Intraclass correlation coefficient (ICC) is a statistic that measures how strongly units in the same group are related. It is calculated as:<br>
 <br>
-**ICC = Between-Group Variance / (Between-Group Variance + Within-Group Variance)**<br>
+**ICC = Between-Group Variance / Total Variance**
+= Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
 <br>
-- When ICC = 0, there is no variance within the groups, meaning all variance comes from between groups. In contrast.<br>
+- When ICC = 0, the varaiance between groups is zero, indicating "all groups are similar," which means the dataset contains no distinct grouping.<br>
 <br>
-- When ICC = 1, the varaiance between groups is zero, indicating "all groups are similar," which means the dataset contains no distinct grouping.<br>
+- When ICC = 1, there is no variance within the groups, meaning all variance comes from between groups.<br>
 <br>
 - When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.78 means that 78% of total variance is due to differences between the groups. <br>
 <br>
+The higher the ICC, the more justification there is to use a multilevel model to investigate the between-group differences. An ICC of 0.78 is considered very high and it is definitely beneficial to use a multilevel model in this case.<br>
 
 ## The null model
 To calculate the ICC, we must first run a **null model**, which is a baseline model that estimates the between-group variance and the within-group variance.<br>
@@ -152,6 +155,7 @@ In contrast, **random effects** capture group-specific variations by allowing fo
 * **Random slope** capture the relationship between a predictor and the outcome across groups or clusters. If the effect of HVI on poor health varies from one neighborhood to another, this can be modeled with random slopes where each neighborhood will have its unique relationship (slope) between HVI and poor physical health. <br>
 <br>
 <br>
+
 ## Fixed-effects model specification
 As mentioned earlier, the averaged HVI predictor is cluster-centered. The cluster means are represented by *mHVI<sub>j</sub>* for neighborhood *j*. <br>
 
@@ -160,7 +164,7 @@ Conceptually, to get the **fixed-effects parameters**we specify the model as:<br
 **Poor Health** = 𝛽<sub>0</sub> + 𝛽<sub>1</sub> ***mHVI<sub>j</sub>*** + 𝛽<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>j</sub>* + *e<sub>ij</sub>* <br>
 where *i* represents individual zip code and *j* UHF neighborhood.<br>
 <br>
-𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates we can extract from the output table.
+𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates can be extracted from the output table.
 ```
 model_fixedE = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus", data=df, groups=df["UHF42"])
 
@@ -178,8 +182,8 @@ Based on the output of the analysis, both **mHVI** and **Percent65plus** are sig
 ## Two-level model specification
 Conceptually, the two-level model can be specified as:<br>
 **Poor Health** = γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-    + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub> )* ∗ ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>) * ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
 
 where **γ**s are **fixed-effects** and ***v<sub>0j</sub>*** and ***v<sub>1j</sub>*** are **random effects**<br>
 <br>
@@ -188,9 +192,10 @@ In python, each term in the mixed-effects model needs to be specified except for
 The random effects are specified using the option **re_formula = "~1 + HVI"** where 1 and HVI specify that the coefficients vary for the grouping variable (i.e., UHF42 neighborhoods).<br>
 <br>
 As a reminder, the HVI variable used for this model is cluster-mean centered, or HVI_CMC.<br>  
-<br>
 
 ```
+<br>
+
 model_2level = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus + HVI_CMC + mHVI*HVI_CMC + Percent65plus*HVI_CMC", data=df, groups=df["UHF42"], re_formula="~1 + HVI_CMC")
 
 results_2level = model_2level.fit()
@@ -205,7 +210,7 @@ The
 # Interpretations of results
 
 
-![two_level_results](assets/images/multilevel_regression_lines.svg)
+![two_level_results](assets/images/multilevel_regression_lines.png)
 <br>
 <br>
 
@@ -215,7 +220,6 @@ One can use the same model to investigate on two other **health outcomes**: perc
 To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, BAdegreePercent, HomeownershipPercent. <br>
 <br>
 For example, by using BAdegreePercent (percentage of residents with a BA degree) and PercentMarried as predictors (X’s) and PercentHighBP as the health outcome (Y), one can investigate the effects of education level and marital status of the residents of a given neighborhood in New York City on the percentage of adults in that neighborhood with high blood pressure, and (2) whether those effects differ for each of the five boroughs. <br>
-<br>
 <br>
 Here is the [MLM_dataframe](assets/images/MLM_dataframe.csv) with all the variables mentioned above.
 <br>
