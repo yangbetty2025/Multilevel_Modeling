@@ -127,8 +127,8 @@ print(results_null.summary())
 Using the **Between-Group Variance** and the **Within-Group Variance** estimated by the model, we can now calculate the ICC: <br>
 
 **ICC** = Between-Group Variance / Total Variance<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;= 7.958 / (7.958 + 2.2614) = **0.78**<br>
+&nbsp;&nbsp;&nbsp;&nbsp;= Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
+ &nbsp;&nbsp;= 7.958 / (7.958 + 2.2614) = **0.78**<br>
 <br>
 <br>
 
