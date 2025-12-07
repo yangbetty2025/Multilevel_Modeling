@@ -183,8 +183,10 @@ Based on the output of the analysis, both **mHVI** and **Percent65plus** are sig
 
 ## Two-level model specification
 Conceptually, the two-level model can be specified as:<br>
-**Poor Health** = γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+**Poor Health** = 𝛽<sub>0j</sub> + 𝛽<sub>1j</sub> ***mHVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+= γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>) * ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
 
 where **γ**s are **fixed-effects** and ***v<sub>0j</sub>*** and ***v<sub>1j</sub>*** are **random effects**<br>
@@ -195,8 +197,7 @@ The random effects are specified using the option **re_formula = "~1 + HVI"** wh
 <br>
 As a reminder, the HVI variable used for this model is cluster-mean centered, or HVI_CMC.<br>  
 
-```
-<br>
+```python
 
 model_2level = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus + HVI_CMC + mHVI*HVI_CMC + Percent65plus*HVI_CMC", data=df, groups=df["UHF42"], re_formula="~1 + HVI_CMC")
 
@@ -204,19 +205,34 @@ results_2level = model_2level.fit()
 
 print(results_2level.summary())
 ```
+<br>
 ![two_level_results](assets/images/two_level_results.png)<br>
 <br>
 
-The <br>
+The parameters in the table of **fixed effects** give the estimates for **γ**s that can be plugged back into the equations to calculate 𝛽<sub>0j</sub> and 𝛽<sub>1j</sub>, as follows: <br>
+
+𝛽<sub>0j</sub> = 21.018 + 1.285 ***mHVI<sub>j</sub>*** - 1.03 ***Age65<sub>j</sub>*** <br>
+𝛽<sub>1j</sub> = 10.182 - 0.44 ***mHVI<sub>j</sub>*** - 0.6 ***Age65<sub>j</sub>***  <br>
 <br>
-
-# Interpretations of results
-
-
+As 𝛽<sub>0j</sub> is the y-intercept for neighborhood *j*, the first equation show that neighborhoods with higher HVI suffer a higher percentage of average percentage of adults with poor physical health compared to neighborhoods with lower HVI. <br>
+<br>
+Similarly, as 𝛽<sub>1j</sub> is the slope for neighborhood *j*, the second equation show that neighborhoods with a HVI that is already high will experience a smaller increase in the percentage of adults with poor physical health compared to neighborhoods whose current HVI is low. <br>
+<br>
+The random-effects parameters are also shown and marked on the output and the individual values for each neighborhood can be obtained by the using the ***random_effects*** attribute of the fitted model. With these values, the individual regression line can be plotted as follows:<br>
+<br>
 ![two_level_results](assets/images/multilevel_regression_lines.png)
 <br>
 <br>
 
+# Results interpretations and implications
+The results show a clear positive relationship between HVI and percentage of adult residents with poor physical health for all neighborhoods.<br>
+<br>
+Neighborhoods with higher HVI have a larger portion of their adult residents in poor physical health. However, it is the neighborhoods with low HVI that will see a relatively larger increase in the porportion of their adult residents with poor physical health.<br>
+<br>
+Therefore, public health **mitigation** measures should target neighborhoods with a high HVI, while **prevention** measures should 
+focus on neighborhoods whose currently lower HVI is likely to rise considerably due to climate change. <br>
+<br>
+<br>
 # Future uses
 One can use the same model to investigate on two other **health outcomes**: percentage of adults with poor mental health (PoorMentalHealthPercent) and percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br> 
 <br>
