@@ -164,6 +164,7 @@ As mentioned earlier, the averaged HVI predictor is cluster-centered. The cluste
 Conceptually, to get the **fixed-effects parameters**we specify the model as:<br>
 
 **Poor Health** = 𝛽<sub>0</sub> + 𝛽<sub>1</sub> ***mHVI<sub>j</sub>*** + 𝛽<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>j</sub>* + *e<sub>ij</sub>* <br>
+<br>
 where *i* represents individual zip code and *j* UHF neighborhood.<br>
 <br>
 𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates can be extracted from the output table.
@@ -187,7 +188,7 @@ Conceptually, the two-level model can be specified as:<br>
 **Poor Health** = 𝛽<sub>0j</sub> + 𝛽<sub>1j</sub> ***mHVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 = γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>) * ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
 
 where **γ**s are **fixed-effects** and ***v<sub>0j</sub>*** and ***v<sub>1j</sub>*** are **random effects**<br>
@@ -199,7 +200,6 @@ The random effects are specified using the option **re_formula = "~1 + HVI"** wh
 As a reminder, the HVI variable used for this model is cluster-mean centered, or HVI_CMC.<br>  
 
 ```python
-
 model_2level = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus + HVI_CMC + mHVI*HVI_CMC + Percent65plus*HVI_CMC", data=df, groups=df["UHF42"], re_formula="~1 + HVI_CMC")
 
 results_2level = model_2level.fit()
