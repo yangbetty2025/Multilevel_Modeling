@@ -14,6 +14,7 @@ It is also possible to construct a three-level model where Level 1 is areas of e
 <br>
 ![three_level_structure](assets/images/three_level_structure.png)
 
+
 # Why use multilevel models?
 1. Nested data **violate key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
 * Observations are not independent <br>
@@ -106,7 +107,7 @@ First load the necessary libraries--the model we want to use is **mixed linear m
 <br>
 Specify the null model, fit the model, and then print out the results. For our study, we will be conducting a two-level mixed linear regression, where the Level 2 groups are **UHF42** neighborhoods.<br>
 <br>
-```
+```python
 import statsmodels.api as sm
 import statsmodels.formula.api as smf 
 
@@ -165,7 +166,7 @@ Conceptually, to get the **fixed-effects parameters**we specify the model as:<br
 where *i* represents individual zip code and *j* UHF neighborhood.<br>
 <br>
 𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates can be extracted from the output table.
-```
+```python
 model_fixedE = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus", data=df, groups=df["UHF42"])
 
 results_fixedE = model_fixedE.fit()
@@ -177,6 +178,7 @@ print(results_fixedE.summary())
 <br>
 
 Based on the output of the analysis, both **mHVI** and **Percent65plus** are significant given the Z-values in the results table.
+<br>
 <br>
 
 ## Two-level model specification
@@ -205,7 +207,8 @@ print(results_2level.summary())
 ![two_level_results](assets/images/two_level_results.png)<br>
 <br>
 
-The 
+The <br>
+<br>
 
 # Interpretations of results
 
