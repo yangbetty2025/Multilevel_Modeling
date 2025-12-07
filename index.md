@@ -97,6 +97,7 @@ Intraclass correlation coefficient (ICC) is a statistic that measures how strong
 - When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.78 means that 78% of total variance is due to differences between the groups. <br>
 <br>
 The higher the ICC, the more justification there is to use a multilevel model to investigate the between-group differences. An ICC of 0.78 is considered very high and it is definitely beneficial to use a multilevel model in this case.<br>
+<br>
 
 ## The null model
 To calculate the ICC, we must first run a **null model**, which is a baseline model that estimates the between-group variance and the within-group variance.<br>
