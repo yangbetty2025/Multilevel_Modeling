@@ -178,7 +178,7 @@ print(results_fixedE.summary())
 ![fixed_effects_results](assets/images/fixed_effects_results.png)<br>
 <br>
 
-Based on the output of the analysis, both **mHVI** and **Percent65plus** are significant given the Z-values in the results table.
+Based on the output of the analysis, both **mHVI** and **Percent65plus** are significant given the *p*-values in the results table.
 <br>
 <br>
 
