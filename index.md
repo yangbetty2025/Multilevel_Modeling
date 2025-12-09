@@ -199,7 +199,7 @@ print(results_2level.summary())
 
 <br>
 
-INSERT IMAGE HERE <br>
+![two_level_results](assets/images/two_level_results.png) 
 
 <br>
 
