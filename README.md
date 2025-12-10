@@ -12,7 +12,9 @@ In light of climate change, some neighborhoods are more vulnerable to extreme he
 It is often observed that areas in close spatial proximity tend to share similar characteristics, thus forming “clusters/groups” and motivating researchers to conduct multilevel regressions to investigate both the within-group and between-group effects of risk factors on health outcomes. <br>
 
 ## Health outcome, predictors, model structure, and datasets
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X’s) are the average **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF42 neighborhood. Both predictors exhibit a hierarchical data structure, in that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City. <br>
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X’s) are the average **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF42 neighborhood.<br> 
+
+Both predictors exhibit a hierarchical data structure, in that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City.<br>
 
 In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older(( of each UHF42 neighborhood). <br>
 
@@ -21,7 +23,7 @@ This analysis will use five datasets that have been extracted from their linked 
 •	[Averaged Heat Vulnerability (HVI) by Zip Code](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/) <br>
 •	[Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
 •	[Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br>
-•	[UHF42 Neighborhood Codes]( https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)<br>
+•	[UHF42 Neighborhood Codes](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)<br>
 
 ## Workflow
 **Step 1: Understanding a Multilevel Regression Model**<br>
@@ -89,7 +91,7 @@ A regression line plot of varying intercepts and slopes for different boroughs s
 ## Further Uses
 One can use the same model to investigate two other **health outcomes**: the percentage of adults with poor mental health (PoorMentalHealthPercent) and the percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br>
 
-To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, BAdegreePercent, and HomeownershipPercent.<br>
+To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, UnemployRate, BAdegreePercent, and HomeownershipPercent.<br>
 
 For example, by using BAdegreePercent (percentage of residents with a BA degree) and PercentMarried as predictors (X’s) and PercentHighBP as the health outcome (Y), one can investigate the effects of education level and marital status on the percentage of adults with high blood pressure in NYC, and (2) whether those effects differ for each of the 42 UHF neighborhoods.<br>
 
@@ -119,7 +121,7 @@ Some zip codes span over multiple neighborhoods. In this case, a simple average 
 •	*[PercentAsian]( https://simplemaps.com/city/new-york/zips/race-asian)*: The percentage of residents who report their race as Asian resident in the area of the zip code. <br>
 •	*PercentOtherRaces*: The percentage of residents who did not report their race White, Black, or Asian resident in the area of the zip code. It was calculated by subtracting PercentWhite, PercentBlack, and Percent Asian from 100 percent. <br>
 
-**df04_Data_by_Borough.csv** contains the following columns:<br>
+**df04_Data_by_Borough.csv** (extracted from [NYU Furman Center City and Borough Data](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data) contains the following columns:<br>
 •	*Percent65plus*: The percentage of residents aged 65 years and older. <br>
 •	*ForeignBornPercent*: The percentage of foreign-born residents. <br>
 •	*RacialDiversityIndex*: The probability that two randomly chosen people in a given geographic area will be of a different race.<br>
@@ -129,7 +131,7 @@ Some zip codes span over multiple neighborhoods. In this case, a simple average 
 •	*BAdegreePercent*: The percentage of residents with a bachelor’s degree.<br>
 •	*HomeownershipPercent*: The number of owner-occupied units divided by the total number of occupied housing units. <br>
 
-**df05_UHF42_Zip.csv** contains the following columns:<br>
+**df05_UHF42_Zip.csv** (extracted from [UHF CODES](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf) contains the following columns:<br>
 •	*Borough*: BX (Bronx), BK (Brooklyn), MN (Manhattan), QN (Queens), and SI (Station Island). <br>
 •	*UHF42*: The code for each of the 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning. <br>
 •	*Zip*: five-digit zip codes used in NYC <br>
