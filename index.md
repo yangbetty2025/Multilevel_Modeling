@@ -3,15 +3,16 @@ layout: default
 ---
 
 # What are multilevel models?
-Multilevel models, also known as hierarchical linear models or mised-effects models, are a statistical aopproach used to handle data with a **hierarchical**, **nested**, and **clustered** structure.<br>
-
+Also known as hierarchical linear models or mixed-effects models, ultilevel models are a statistical aopproach used to handle data with a **hierarchical**, **nested**, or **clustered** structure.<br>
+<br>
 An example of hierarchical data is that children who grew up in the **same homes** with the same parents tend to be more alike than random individuals from the same age groups. <br>
-
+<br>
 Similarly, students from the **same school** or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
-
-![data_hierarchy](assets/images/data_hierarchy.png)
 <br>
 
+![data_hierarchy](assets/images/data_hierarchy.png)
+
+<br>
 It is also possible to construct a three-level model where Level 1 is areas of each zip code, Level 2 is neighborhoods, and Level 3 is boroughs. The illustration below uses "UHF42 neighborhoods," which are a set of 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning.<br>
 <br>
 
@@ -20,7 +21,9 @@ It is also possible to construct a three-level model where Level 1 is areas of e
 
 # Why use multilevel models?
 1. Nested data **violate key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
+
 * Observations are not independent <br>
+
 * Error terms are not independent <br>
 
 2. Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
@@ -39,7 +42,7 @@ It is also possible to construct a three-level model where Level 1 is areas of e
 <br>
 
 # The research question and rationale 
-Are Heat Vulnerability Index (HVI) and poor mental health related to the physical health of adults residing in New York City? Do those relationships differ depending on the neiborhood? <br>
+Are Heat Vulnerability Index (HVI) and older population related to the physical health of adults residing in New York City? Do these relationships differ depending on the neiborhood? <br>
 
 In light of climate change, some neighborhoods are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that are disproportionately impacted by heat (e.g., older adults, outdoor workers, and those with lower income). <br>
 
@@ -47,28 +50,34 @@ It is often observed that areas in close spatial proximity tend to share similar
 <br>
 
 # Health outcome, predictors, model structure, and datasets
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF neighborhood, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the five boroughs.<br>
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are averaged **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF42 neighborhood, both of which exhibit a hierarchical data structure in the sense that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City.<br>
 
 In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older** of each UHF42 neighborhood).<br>
 
 This analysis will use five datasets that have been extracted from their linked sources and preprocessed: <br>
 
 * [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
+
 * [Averaged Heat Vulnerability (HVI) by Zip Cod](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)<br>
+
 * [Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
+
 * [Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br> 
+
 * [UHF42 Neighborhood Codes](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)
 <br>
 <br>
 
 # Data visualization: scatter plots & regression lines
 It is always a good idea to visualize the data before modeling to identify patterns, trends, and outliers that are not apparent in raw numbers.<br> 
-
+<br>
 In this study, an **outlier** (zip code 11005) was detected because of its extremely high median age of residents (80.6 years old). Upon further investigation, zip code 11005 contains only one senior center. This data point was removed from the analysis dataset as a result.<br>
-
+<br>
 The following unicolor scatter plot indicates a **positive** relationship between averaged **HVI** and **poor physical health**, while the multicolor scatter plot further reveals **clusters** of data points at the borough level. <br>
+<br>
 
  ![HVI_scatterplots](assets/images/HVI_scatterplots.png)
+
 <br>
 
 Interestingly, the unicolor scatter plot below shows a negative relationship between percentage of **residents aged 65 and older** and **poor physical health**, which is contrary to what one might expect. There is a "clustering effect" by default, as all zip codes from the same borough share the percentage of residents aged 65 and older.<br>
