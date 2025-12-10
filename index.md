@@ -7,7 +7,7 @@ Also known as hierarchical linear models or mixed-effects models, multilevel mod
 
 An example of hierarchical data is that children who grew up in the **same homes** with the same parents tend to be more alike than random individuals from the same age groups. <br>
 
-Similarly, students from the **same school** or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
+Similarly, students from the **same school** or neighborhood may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
 <br>
 
 ![data_hierarchy](assets/images/data_hierarchy.png)
@@ -251,7 +251,7 @@ focus on neighborhoods whose current lower HVI is likely to rise considerably du
 # Future uses
 One can use the same model to investigate two other **health outcomes**: the percentage of adults with poor mental health (PoorMentalHealthPercent) and the percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br> 
 
-To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, BAdegreePercent, and HomeownershipPercent. <br>
+To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, UnemployRate, BAdegreePercent, and HomeownershipPercent. <br>
 
 For example, by using BAdegreePercent (percentage of residents with a BA degree) and PercentMarried as predictors (X’s) and PercentHighBP as the health outcome (Y), one can investigate the effects of education level and marital status on the percentage of adults with high blood pressure in NYC, and (2) whether those effects differ for each of the 42 UHF neighborhoods. <br>
 
