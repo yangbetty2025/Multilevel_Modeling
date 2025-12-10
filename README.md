@@ -138,6 +138,6 @@ Some zip codes span multiple neighborhoods. In this case, a simple average of HV
 •	*UHF42*: The code for each of the 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning. <br>
 •	*Zip*: five-digit zip codes used in NYC <br>
 
-**MLM_datafram.csv** is file created by merging the above five files and removing all null values as well as one outlier (zip code 11005). 
+**MLM_datafram.csv** is a file created by merging the above five files and removing all null values as well as one outlier (zip code 11005). 
 
 **YANG_Final_Project.ipynb** is a Python notebook with step-by-step notes and Python code for completing this project. <br>
