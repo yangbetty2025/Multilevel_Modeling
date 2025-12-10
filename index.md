@@ -4,9 +4,9 @@ layout: default
 
 # What are multilevel models?
 Also known as hierarchical linear models or mixed-effects models, multilevel models are a statistical approach for handling data with a **hierarchical**, **nested**, or **clustered** structure.<br>
-<br>
+
 An example of hierarchical data is that children who grew up in the **same homes** with the same parents tend to be more alike than random individuals from the same age groups. <br>
-<br>
+
 Similarly, students from the **same school** or neighborhoods may perform more similarly on standardized tests. In this case, individual students' test scores are considered "nested" within institutions or geographical areas. <br>
 <br>
 
@@ -17,29 +17,32 @@ It is also possible to construct a three-level model in which Level 1 comprises 
 <br>
 
 ![three_level_structure](assets/images/three_level_structure.png)
+
 <br>
 
 # Why use multilevel models?
 Nested data **violates key assumptions** of Ordinary Least Squares (OLS) in linear regression, because: <br>
 
-* Observations are not independent <br>
+- Observations are not independent <br>
 
-* Error terms are not independent <br>
+- Error terms are not independent <br>
 
 Some **data structures** that do not appear to be clustered can actually be. Here is an extreme example:<br>
+<br>
 
  ![data_structure](assets/images/data_structure.png)
- <sub> Source: "A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam </sub>
- <br>
+ <sub> Source: "A Fun Intro to Multilevel Models in R" by Fabio Votta of University of Amsterdam </sub> <br>
+<br>
 
 Below is a list of helpful resources for getting a basic understanding of multilevel modeling: <br>
 
-* [Multilevel Modeling: A Comprehensive Guide for Data Scientists](https://www.datacamp.com/tutorial/multilevel-modeling)<br>
+- [Multilevel Modeling: A Comprehensive Guide for Data Scientists](https://www.datacamp.com/tutorial/multilevel-modeling)<br>
 
-* [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#1)<br>
-* [Advanced Statistics: Multilevel Regression](https://advstats.psychstat.org/python/multilevel/index.php)<br>
+- [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#1)<br>
 
-* [Centering Options and Interpretations](https://www.learn-mlms.com/08-module-8.html)<br>
+- [Advanced Statistics: Multilevel Regression](https://advstats.psychstat.org/python/multilevel/index.php)<br>
+
+- [Centering Options and Interpretations](https://www.learn-mlms.com/08-module-8.html)<br>
 <br>
 
 # The research question and rationale 
@@ -57,23 +60,22 @@ In multilevel models, **Level 1** predictors are those that vary within a group 
 
 This analysis will use five datasets that have been extracted from their linked sources and preprocessed: <br>
 
-* [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
+- [Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
 
-* [Averaged Heat Vulnerability (HVI) by Zip Code](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)<br>
+- [Averaged Heat Vulnerability (HVI) by Zip Code](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/hvi/)<br>
 
-* [Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
+- [Risk Factors by Zip Code](https://simplemaps.com/city/new-york/zips/age-median)<br>
 
-* [Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br> 
+- [Risk Factors by Borough](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)<br> 
 
-* [UHF42 Neighborhood Codes](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)
-<br>
+- [UHF42 Neighborhood Codes](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)<br>
 <br>
 
 # Data visualization: scatter plots and regression lines
 It is always a good idea to visualize the data before modeling to identify patterns, trends, and outliers that are not apparent in raw numbers.<br> 
-<br>
+
 In this study, an **outlier** (zip code 11005) was detected due to its extremely high median age of residents (80.6 years). Upon further investigation, zip code 11005 contains only one senior center. This data point was removed from the analysis dataset after careful consideration.<br>
-<br>
+
 The following unicolor scatter plot indicates a **positive** relationship between the average **HVI** and **poor physical health**. In contrast, the multicolor scatter plot further reveals **clusters** of data points at the borough level. <br>
 <br>
 
@@ -82,15 +84,16 @@ The following unicolor scatter plot indicates a **positive** relationship betwee
 <br>
 
 Interestingly, the unicolor scatter plot below shows a negative relationship between the percentage of **residents aged 65 and older** and **poor physical health**, which is contrary to what one might expect. Note that there is a "clustering effect" by default, as all zip codes from the same borough share the same percentage of residents aged 65 and older.<br>
-
+<br>
 
 ![percent65plus](assets/images/percent65plus_scatterplots.png)
-<br>
 
+<br>
 An OLS linear regression on the entire dataset would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. In contrast, and as demonstrated here, when the same regression is conducted separately for each borough, five distinct y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
 <br>
+
 ![HVI_regression_lines](assets/images/HVI_regression_lines.png)
-<br>
+
 <br>
 
 # Data Analysis
@@ -143,7 +146,6 @@ Using the **Between-Group Variance** and the **Within-Group Variance** estimated
 It is worth noting that, for this multilevel regression, the HVI predictor was cluster-mean centered (also known as group-mean centered). In other words, the arithmetic mean of HVI for each cluster (UHF42 neighborhood) was subtracted from each observation’s HVI value in the corresponding neighborhood.<br>
 
 **Mean centering** is a technique used in linear regression models when predictors do not have meaningful zero points. In this study, HVI has no meaningful zero  because the Heat Vulnerability Index ranges from 1 to 5. Without centering it, the y-intercept would represent the average percentage of residents with poor physical health when HVI is zero, which is out of range for the index.<br>
-<br>
 
 Other reasons for centering are to reduce multicollinearity and to simplify interpretations when interaction terms are included in the model.<br>
 
@@ -153,20 +155,21 @@ There are two options for centering in multilevel models: grand-mean centering o
 In multilevel models, **fixed effects** focus on generalizable patterns and relationships (y-intercept and slope) that are assumed to be consistent across all groups of analysis.<br> 
 
 In contrast, **random effects** capture group-specific variation by allowing variability between groups and estimating parameters that vary across groups or clusters. There are two parameters for random effects:<br>
-<br>
-* **Random intercepts** estimate the variation in the baseline (intercept) between groups. For example, in this study, random intercepts allow each neighborhood to have a unique average percentage of residents with poor health, thus reflecting differences in baseline performance across different neighborhoods. <br>
-<br>
-* **Random slopes** capture the relationship between a predictor and the outcome across groups or clusters. If the effect of HVI on poor health varies across neighborhoods, this can be modeled using random slopes, where each neighborhood has its own unique relationship (slope) between HVI and poor physical health. <br>
-<br>
+
+- **Random intercepts** estimate the variation in the baseline (intercept) between groups. For example, in this study, random intercepts allow each neighborhood to have a unique average percentage of residents with poor health, thus reflecting differences in baseline performance across different neighborhoods. <br>
+
+- **Random slopes** capture the relationship between a predictor and the outcome across groups or clusters. If the effect of HVI on poor health varies across neighborhoods, this can be modeled using random slopes, where each neighborhood has its own unique relationship (slope) between HVI and poor physical health. <br>
+
+
 ## Fixed-effects model specification
 As mentioned earlier, the averaged HVI predictor is cluster-centered. The cluster means are represented by *mHVI<sub>j</sub>* for neighborhood *j*. <br>
 
 Conceptually, to get the **fixed-effects parameters**, we specify the model as:<br>
 
 **Poor Health** = 𝛽<sub>0</sub> + 𝛽<sub>1</sub> ***mHVI<sub>j</sub>*** + 𝛽<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>j</sub>* + *e<sub>ij</sub>* <br>
-<br>
+
 where *i* represents the individual zip code and *j* the UHF neighborhood.<br>
-<br>
+
 𝛽<sub>0</sub>, 𝛽<sub>1</sub>, and 𝛽<sub>2</sub> are fixed-effects parameters whose estimates can be extracted from the output table.<br>
 
 ```python
@@ -179,7 +182,9 @@ print(results_fixedE.summary())
 
 <br>
 
-![fixed_effects_results](assets/images/fixed_effects_results.png)<br>
+![fixed_effects_results](assets/images/fixed_effects_results.png)
+
+<br>
 
 Based on the output of the analysis, both **mHVI** and **Percent65plus** are **significant**, given the *p*-values in the results table.<br>
 
@@ -219,32 +224,32 @@ The parameters in the table of **fixed effects** give the estimates for **γ**s 
 𝛽<sub>1j</sub> = 6.309 - 0.502 ***mHVI<sub>j</sub>*** - 0.261 ***Age65<sub>j</sub>***  <br>
 <br>
 As 𝛽<sub>0j</sub> is the y-intercept for neighborhood *j*, the first equation shows that neighborhoods with higher HVI have a higher average percentage of adults with poor physical health than those with lower HVI. <br>
-<br>
+
 Similarly, as 𝛽<sub>1j</sub> is the slope for neighborhood *j*, the second equation indicates that neighborhoods with a high HVI will experience a smaller increase in the percentage of adults with poor physical health than neighborhoods with a low HVI. <br>
-<br>
+
 The random-effects parameters are also shown and marked on the output. The individual values for each neighborhood can be obtained by using the ***random_effects*** attribute of the fitted model. With these values, the individual neighborhood-specific regression lines can be plotted as follows:<br>
 <br>
+
 ![two_level_results](assets/images/multilevel_regression_lines.png)
-<br>
+
 <br>
 
 # Results interpretations and implications
 The results show a clear positive relationship between HVI and the percentage of adult residents with poor physical health across **all neighborhoods**, though to varying degrees.<br>
-<br>
+
 Neighborhoods with higher HVIs have a larger portion of their adult residents in poor physical health. However, it is the neighborhoods with low HVIs that will see a relatively larger increase in the proportion of their adult residents with poor physical health.<br>
-<br>
+
 Therefore, public health **mitigation** measures should target neighborhoods with a high HVI, while **prevention** measures should 
 focus on neighborhoods whose current lower HVI is likely to rise considerably due to climate change. <br>
-<br>
-<br>
+
+
 # Future uses
 One can use the same model to investigate two other **health outcomes**: the percentage of adults with poor mental health (PoorMentalHealthPercent) and the percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br> 
-<br>
+
 To investigate alternative **predictors**, one can choose from MedianAge, MedianIncome, PercentCollege, PercentMale, PercentMarried, PercentWhite, PercentBlack, PercentAsian, PercentOtherRaces, ForeignBornPercent, RacialDiversityIndex, MedianHouseholdIncome, PovertyRate, BAdegreePercent, and HomeownershipPercent. <br>
-<br>
+
 For example, by using BAdegreePercent (percentage of residents with a BA degree) and PercentMarried as predictors (X’s) and PercentHighBP as the health outcome (Y), one can investigate the effects of education level and marital status on the percentage of adults with high blood pressure in NYC, and (2) whether those effects differ for each of the 42 UHF neighborhoods. <br>
-<br>
-Here is the [MLM_dataframe](assets/images/MLM_dataframe.csv) with all the variables mentioned above.
-<br>
+
+Here is the [MLM_dataframe](assets/images/MLM_dataframe.csv) with all the variables mentioned above.<br>
 
 
