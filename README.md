@@ -121,7 +121,7 @@ Some zip codes span over multiple neighborhoods. In this case, a simple average 
 •	*[PercentAsian]( https://simplemaps.com/city/new-york/zips/race-asian)*: The percentage of residents who report their race as Asian resident in the area of the zip code. <br>
 •	*PercentOtherRaces*: The percentage of residents who did not report their race White, Black, or Asian resident in the area of the zip code. It was calculated by subtracting PercentWhite, PercentBlack, and Percent Asian from 100 percent. <br>
 
-**df04_Data_by_Borough.csv** (extracted from [NYU Furman Center City and Borough Data](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data) contains the following columns:<br>
+**df04_Data_by_Borough.csv** (extracted from [NYU Furman Center City and Borough Data](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)) contains the following columns:<br>
 •	*Percent65plus*: The percentage of residents aged 65 years and older. <br>
 •	*ForeignBornPercent*: The percentage of foreign-born residents. <br>
 •	*RacialDiversityIndex*: The probability that two randomly chosen people in a given geographic area will be of a different race.<br>
@@ -131,7 +131,7 @@ Some zip codes span over multiple neighborhoods. In this case, a simple average 
 •	*BAdegreePercent*: The percentage of residents with a bachelor’s degree.<br>
 •	*HomeownershipPercent*: The number of owner-occupied units divided by the total number of occupied housing units. <br>
 
-**df05_UHF42_Zip.csv** (extracted from [UHF CODES](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf) contains the following columns:<br>
+**df05_UHF42_Zip.csv** (extracted from [UHF CODES](https://www.nyc.gov/assets/doh/downloads/pdf/ah/zipcodetable.pdf)) contains the following columns:<br>
 •	*Borough*: BX (Bronx), BK (Brooklyn), MN (Manhattan), QN (Queens), and SI (Station Island). <br>
 •	*UHF42*: The code for each of the 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning. <br>
 •	*Zip*: five-digit zip codes used in NYC <br>
