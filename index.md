@@ -13,7 +13,7 @@ Similarly, students from the **same school** or neighborhoods may perform more s
 ![data_hierarchy](assets/images/data_hierarchy.png)
 
 <br>
-It is also possible to construct a three-level model in which Level 1 is areas within each zip code, Level 2 is the neighborhoods, and Level 3 is the boroughs. The illustration below uses "UHF42 neighborhoods," which are a set of 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning.<br>
+It is also possible to construct a three-level model in which Level 1 comprises areas within each zip code, Level 2 the neighborhoods, and Level 3 the boroughs. The illustration below uses "UHF42 neighborhoods," which are a set of 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning.<br>
 <br>
 
 ![three_level_structure](assets/images/three_level_structure.png)
