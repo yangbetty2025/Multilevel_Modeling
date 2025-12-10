@@ -4,7 +4,7 @@ This is a step-by-step demonstration on how to conduct a multilevel regression a
 (1) Are the Heat Vulnerability Index (HVI) and the percentage of older population related to the physical health of adults residing in NYC?<br>
 (2) Do these relationships vary by neighborhood?<br>
 
-Starting from demonstrating the need to use multilevel modeling for hierarchical data, this project aims to showcase a variety of tools offered by Python libraries for data extraction, manipulation,  visualization, statistical modeling and analysis. <br> 
+Starting with a demonstration of the need to use multilevel modeling for hierarchical data, this project aims to showcase a variety of tools offered by Python libraries for data extraction, manipulation,  visualization, statistical modeling, and analysis. <br> 
 
 ## Rationale
 In light of climate change, some neighborhoods are more vulnerable to extreme heat than others, such as urban areas with high impervious surfaces, less green and shady surfaces, fewer socioeconomic resources, and a larger population that is disproportionately impacted by heat (e.g., older adults, outdoor workers, and those with lower income). <br>
@@ -16,7 +16,7 @@ In this study, the **health outcome** (Y) is the percentage of adults with **poo
 
 Both predictors exhibit a hierarchical data structure, in that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City.<br>
 
-In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older(( of each UHF42 neighborhood). <br>
+In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older** of each UHF42 neighborhood). <br>
 
 This analysis will use five datasets that have been extracted from their linked sources and preprocessed:<br> 
 •	[Health Outcomes by Zip Code](https://datacommons.org/place/geoId/3651000?category=Health)<br>
@@ -28,7 +28,7 @@ This analysis will use five datasets that have been extracted from their linked 
 ## Workflow
 **Step 1: Understanding a Multilevel Regression Model**<br>
 •	For an overview on multilevel regressions: [Multilevel Modeling: A Comprehensive Guide for Data Scientists](https://www.datacamp.com/tutorial/multilevel-modeling) <br>
-•	For a illustrated introduction to multilevel models using R: [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#1)<br>
+•	For an illustrated introduction to multilevel models using R: [A Fun Intro to Multilevel Models in R](https://favstats.github.io/intro_multilevel/slides/#1)<br>
 •	For an example of how to conduct a multilevel regression using Python: [Advanced Statistics: Multilevel Regression](https://advstats.psychstat.org/python/multilevel/index.php) <br>
 •	For explanation on grand mean centering vs. cluster mean centering: [Centering Options and Interpretations](https://www.learn-mlms.com/08-module-8.html) <br>
 <br>
@@ -55,7 +55,7 @@ These libraries: ***numpy***, ***matplotlib.pyplot***, ***MaxNLocator*** from **
 
 •	Unicolor scatter plot to show the relationship between the *Percentage of Residents with Poor Physical Health* (health outcome) and the average *HVI* (predictor) for all zip codes. <br>
 
-•	Unicolor scatter plot to show the relationship between the *Percentage of Residents with Poor Physical Health* (health outcome) and the *Percentage of residents aged 65 years and old* (predictor) for each zip code. <br>
+•	Unicolor scatter plot to show the relationship between the *Percentage of Residents with Poor Physical Health* (health outcome) and the *Percentage of residents aged 65 years and older* (predictor) for each zip code. <br>
 
 •	Multicolor scatter plots (one color for each borough) with a matching color regression line for each cluster of data points to show the relationship between *Percentage of Residents with Poor Physical Health* (health outcome) and the average *HVI* (predictor) for each borough. <br>
 
@@ -63,9 +63,9 @@ These libraries: ***numpy***, ***matplotlib.pyplot***, ***MaxNLocator*** from **
 
 •	Unicolor line plot to show the varying slopes and intercepts for each of the 42 UHF neighborhoods.<br>
 
-It is visually evident from the multicolor scatter plots that each borough forms a **cluster**, which supports the use of multilevel regression over Ordinary Least Squares (single level) regression. <br>
+It is visually evident from the multicolor scatter plots that each borough forms a **cluster**, supporting the use of multilevel regression over Ordinary Least Squares (single-level) regression. <br>
 
-We can see that there is a **positive  relationship** between **Percentage of Residents with Poor Physical Health** and the average **HVI** for each zip code. Namely, the higher the Heat Vulnerability Index, the higher the percentage of residents with poor physical health. <br>
+We can see a **positive  relationship** between the **Percentage of Residents with Poor Physical Health** and the average **HVI** for each zip code. Namely, the higher the Heat Vulnerability Index, the higher the percentage of residents with poor physical health. <br>
 
 It is worth noting that, for this multilevel regression, the average *HVI* (a predictor) was **cluster-mean-centered**, which means the arithmetic mean of HVI for each cluster (UHF42 neighborhoods) was subtracted from each observation’s HVI values in the corresponding neighborhood. <br>
 
@@ -80,13 +80,14 @@ Libraries used for data analysis were: *statsmodels.api* and *statsmodels.formul
 
 •	First, a **null model** was specified to see if there is significant clustering or group-level variation in the data that justifies using a multilevel model instead of a standard regression. <br>
 
-•	Using the statistics from the null model, in can compute the intraclass correlation coefficient (**ICC**). If ICC > 0.1, one should consider the use of a multilevel model. In this study, the ICC = 0.78, which supports the use of multilevel modeling. <br>
+•	Using the statistics from the null model, one can compute the intraclass correlation coefficient (**ICC**). If ICC > 0.1, one should consider using a multilevel model. In this study, the ICC = 0.78, which supports the use of multilevel modeling. <br>
 
 •	Finally, a multilevel model (mixed effects linear model) is specified to investigate the fixed effects and random effects of the predictor variables. <br>
 
 **Step 5: Interpretations of Results**<br>
 Given the *p*-value from the fixed-effects model results, both **HVI** and the percentage of residents aged *65 and older** are **significant** predictors both in slope and intercept. <br>
-A regression line plot of varying intercepts and slopes for different boroughs serves as a visual illustration that the relationship between poor physical health and HVI (while holding the percentage of older residents constant) is *not fixed*, but rather, cluster dependent. <br>
+
+A regression line plot with varying intercepts and slopes across different neighborhoods illustrates that the relationship between poor physical health and HVI (while holding the percentage of older residents constant) is *not fixed* but rather cluster-dependent. <br>
 
 ## Further Uses
 One can use the same model to investigate two other **health outcomes**: the percentage of adults with poor mental health (PoorMentalHealthPercent) and the percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br>
@@ -109,17 +110,18 @@ Here is the [MLM_dataframe]( https://yangbetty2025.github.io/Multilevel_Modeling
 •	*Zip*: five-digit zip codes used in NYC <br>
 •	*Borough*: BX (Bronx), BK (Brooklyn), MN (Manhattan), QN (Queens), and SI (Station Island). <br>
 •	*avgHVI*: Heat Vulnerability Index ranking from 1 to 5, with 1 indicating the associated neighborhood being least vulnerable and 5 the most vulnerable. Four factors were used in calculating the HVI for each neighborhood: (i) daytime summer surface *temperature*, (ii) availability of *air conditioning*, (iii) amount of *green space*, and (iv) *median income* as a proxy for the likelihood of being able to afford air conditioning.  <br>
-Some zip codes span over multiple neighborhoods. In this case, a simple average of HVI is taken for those zip codes to create this *avgHVI* variable. <br>
+
+Some zip codes span multiple neighborhoods. In this case, a simple average of HVI is taken for those zip codes to create the *avgHVI* variable. <br>
 <br>
 **df03_Data_by-Zip.csv** contains the following columns:<br>
 •	*[MedianAge]( https://simplemaps.com/city/new-york/zips/age-median)*: The age of the median resident in the area of the zip code. <br>
 •	*[PercentCollege]( https://simplemaps.com/city/new-york/zips/education-college-or-above)*: The percentage of residents with at least a 4-year degree resident in the area of the zip code. <br>
-•	*[PercentMale]( https://simplemaps.com/city/new-york/zips/male)*: The percentage of residents who report being male resident in the area of the zip code. <br>
-•	*[PercentMarried]( https://simplemaps.com/city/new-york/zips/married)*: The percentage of residents who report being married resident in the area of the zip code. <br>
-•	*[PercentWhite]( https://simplemaps.com/city/new-york/zips/race-white)*: The percentage of residents who report their race White resident in the area of the zip code. <br>
-•	*[PercentBlack]( https://simplemaps.com/city/new-york/zips/race-black)*: The percentage of residents who report their race as Black or African American resident in the area of the zip code. <br>
-•	*[PercentAsian]( https://simplemaps.com/city/new-york/zips/race-asian)*: The percentage of residents who report their race as Asian resident in the area of the zip code. <br>
-•	*PercentOtherRaces*: The percentage of residents who did not report their race White, Black, or Asian resident in the area of the zip code. It was calculated by subtracting PercentWhite, PercentBlack, and Percent Asian from 100 percent. <br>
+•	*[PercentMale]( https://simplemaps.com/city/new-york/zips/male)*: The percentage of residents who report being male in the area of the zip code. <br>
+•	*[PercentMarried]( https://simplemaps.com/city/new-york/zips/married)*: The percentage of residents who report being married in the area of the zip code. <br>
+•	*[PercentWhite]( https://simplemaps.com/city/new-york/zips/race-white)*: The percentage of residents who report their race as White in the area of the zip code. <br>
+•	*[PercentBlack]( https://simplemaps.com/city/new-york/zips/race-black)*: The percentage of residents who report their race as Black or African American in the area of the zip code. <br>
+•	*[PercentAsian]( https://simplemaps.com/city/new-york/zips/race-asian)*: The percentage of residents who report their race as Asian in the area of the zip code. <br>
+•	*PercentOtherRaces*: The percentage of residents who did not report their race as White, Black, or Asian in the area of the zip code. It was calculated by subtracting *PercentWhite*, *PercentBlack*, and *PercentAsian* from 100 percent. <br>
 
 **df04_Data_by_Borough.csv** (extracted from [NYU Furman Center City and Borough Data](https://furmancenter.org/stateofthecity/view/citywide-and-borough-data)) contains the following columns:<br>
 •	*Percent65plus*: The percentage of residents aged 65 years and older. <br>
@@ -136,4 +138,6 @@ Some zip codes span over multiple neighborhoods. In this case, a simple average 
 •	*UHF42*: The code for each of the 42 defined community areas in New York City, created by the NYC Department of Health and Mental Hygiene and the United Hospital Fund (UHF) for health research and planning. <br>
 •	*Zip*: five-digit zip codes used in NYC <br>
 
-**YANG_Final_Project.ipynb** is a python notebook with step-by-step notes and Python codes for completing this project. <br>
+**MLM_datafram.csv** is file created by merging the above five files and removing all null values as well as one outlier (zip code 11005). 
+
+**YANG_Final_Project.ipynb** is a Python notebook with step-by-step notes and Python code for completing this project. <br>
