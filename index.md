@@ -98,6 +98,7 @@ An OLS linear regression on the entire dataset would estimate a single y-interce
 
 # Data Analysis
 Visualization is an intuitive way to get the big picture (pun intended) of our data, but there is a standardized numerical metric we can use to justify the use of a multilevel model. The measurement is called the "intraclass correlation coefficient," or **ICC** for short. <br>
+<br>
 
 ## Intraclass correlation coefficient (ICC) 
 The intraclass correlation coefficient (ICC) is a statistic that measures how strongly units in the same group are related. It is calculated as:<br>
@@ -112,6 +113,7 @@ The intraclass correlation coefficient (ICC) is a statistic that measures how st
 - When 0 < ICC < 1, it tells the degree of between-group differences. For example, an ICC of 0.78 means that 78% of the total variance is due to differences between the groups. <br>
 
 The higher the ICC, the stronger the justification for using a multilevel model to investigate between-group differences. An ICC of 0.78 is considered very high, and it is most definitely beneficial to use a multilevel model in this case.<br>
+<br>
 
 ## The null model
 To calculate the ICC, we must first run a **null model**, which is a baseline model that estimates the between-group variance and the within-group variance.<br>
@@ -141,6 +143,7 @@ Using the **Between-Group Variance** and the **Within-Group Variance** estimated
 **ICC** = Between-Group Variance / Total Variance<br>
 &nbsp;&nbsp;&nbsp;&nbsp;= Between-Group Variance / (Between-Group Variance + Within-Group Variance)<br>
  &nbsp;&nbsp;&nbsp;&nbsp;= 7.958 / (7.958 + 2.2614) = **0.78**<br>
+ <br>
 
 ## Cluster-mean centering
 It is worth noting that, for this multilevel regression, the HVI predictor was cluster-mean centered (also known as group-mean centered). In other words, the arithmetic mean of HVI for each cluster (UHF42 neighborhood) was subtracted from each observation’s HVI value in the corresponding neighborhood.<br>
@@ -150,6 +153,7 @@ It is worth noting that, for this multilevel regression, the HVI predictor was c
 Other reasons for centering are to reduce multicollinearity and to simplify interpretations when interaction terms are included in the model.<br>
 
 There are two options for centering in multilevel models: grand-mean centering or cluster-mean centering. Since we are interested in the Level 2 predictor, **cluster-mean centering** is chosen because it provides an unbiased estimate of the within-cluster effect and produces better estimates of the slope variance.<br>
+<br>
 
 ## Fixed effects vs. random effects
 In multilevel models, **fixed effects** focus on generalizable patterns and relationships (y-intercept and slope) that are assumed to be consistent across all groups of analysis.<br> 
@@ -159,7 +163,7 @@ In contrast, **random effects** capture group-specific variation by allowing var
 - **Random intercepts** estimate the variation in the baseline (intercept) between groups. For example, in this study, random intercepts allow each neighborhood to have a unique average percentage of residents with poor health, thus reflecting differences in baseline performance across different neighborhoods. <br>
 
 - **Random slopes** capture the relationship between a predictor and the outcome across groups or clusters. If the effect of HVI on poor health varies across neighborhoods, this can be modeled using random slopes, where each neighborhood has its own unique relationship (slope) between HVI and poor physical health. <br>
-
+<br>
 
 ## Fixed-effects model specification
 As mentioned earlier, the averaged HVI predictor is cluster-centered. The cluster means are represented by *mHVI<sub>j</sub>* for neighborhood *j*. <br>
@@ -187,6 +191,7 @@ print(results_fixedE.summary())
 <br>
 
 Based on the output of the analysis, both **mHVI** and **Percent65plus** are **significant**, given the *p*-values in the results table.<br>
+<br>
 
 ## Two-level model specification
 Conceptually, the two-level model can be specified as:<br>
@@ -222,7 +227,7 @@ The parameters in the table of **fixed effects** give the estimates for **γ**s 
 
 𝛽<sub>0j</sub> = 16.237 + 1.693 ***mHVI<sub>j</sub>*** - 0.733 ***Age65<sub>j</sub>*** <br>
 𝛽<sub>1j</sub> = 6.309 - 0.502 ***mHVI<sub>j</sub>*** - 0.261 ***Age65<sub>j</sub>***  <br>
-<br>
+
 As 𝛽<sub>0j</sub> is the y-intercept for neighborhood *j*, the first equation shows that neighborhoods with higher HVI have a higher average percentage of adults with poor physical health than those with lower HVI. <br>
 
 Similarly, as 𝛽<sub>1j</sub> is the slope for neighborhood *j*, the second equation indicates that neighborhoods with a high HVI will experience a smaller increase in the percentage of adults with poor physical health than neighborhoods with a low HVI. <br>
@@ -241,7 +246,7 @@ Neighborhoods with higher HVIs have a larger portion of their adult residents in
 
 Therefore, public health **mitigation** measures should target neighborhoods with a high HVI, while **prevention** measures should 
 focus on neighborhoods whose current lower HVI is likely to rise considerably due to climate change. <br>
-
+<br>
 
 # Future uses
 One can use the same model to investigate two other **health outcomes**: the percentage of adults with poor mental health (PoorMentalHealthPercent) and the percentage of adults with high blood pressure (HighBPPercent) residing in the area with a given zip code.<br> 
