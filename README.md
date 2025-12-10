@@ -1,7 +1,7 @@
 # Multilevel Modeling with Python
 ## Description
 This is a step-by-step demonstration on how to conduct a multilevel regression analysis using Python to answer these research questions: <br> 
-(1) Are the Heat Vulnerability Index (HVI) and the percentage of older population related to the physical health of adults residing in New York City?<br>
+(1) Are the Heat Vulnerability Index (HVI) and the percentage of older population related to the physical health of adults residing in NYC?<br>
 (2) Do these relationships vary by neighborhood?<br>
 
 Starting from demonstrating the need to use multilevel modeling for hierarchical data, this project aims to showcase a variety of tools offered by Python libraries for data extraction, manipulation,  visualization, statistical modeling and analysis. <br> 
