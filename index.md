@@ -54,7 +54,7 @@ It is often observed that areas in close spatial proximity tend to share similar
 <br>
 
 # Health outcome, predictors, model structure, and datasets
-In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are the average **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF42 neighborhood. Both predictors exhibit a hierarchical data structure, in that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City.<br>
+In this study, the **health outcome** (Y) is the percentage of adults with **poor physical health** residing in a given zip code, while the two **predictors** (X's) are the average **HVI** by zip code and the percentage of residents aged **65 and older** of each UHF42 neighborhood. Both predictors exhibit a hierarchical data structure, in that each zip code belongs to one of the 42 UHF42 neighborhoods within the five boroughs of New York City. Note that boroughs are the Level 3 of this data structure and are not included in this study's two-layer hierarchical linear model.<br>
 
 In multilevel models, **Level 1** predictors are those that vary within a group (in this study, averaged **HVI** by zip code), whereas **Level 2** variables are characteristics of the group (in this study, the **percentage of residents aged 65 and older** of each UHF42 neighborhood).<br>
 
@@ -89,7 +89,7 @@ Interestingly, the unicolor scatter plot below shows a negative relationship bet
 ![percent65plus](assets/images/percent65plus_scatterplots.png)
 
 <br>
-An OLS linear regression on the entire dataset would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. In contrast, and as demonstrated here, when the same regression is conducted separately for each borough, five distinct y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
+An OLS linear regression on the entire dataset would estimate a single y-intercept and slope for the effect of HVI on poor physical health for *all* residents of NYC, regardless of their borough of residence. In contrast, and as demonstrated below, when the same regression is conducted separately for each borough, five distinct y-intercepts and slopes emerge, supporting the use of a multilevel model.<br>
 <br>
 
 ![HVI_regression_lines](assets/images/HVI_regression_lines.png)
@@ -97,7 +97,7 @@ An OLS linear regression on the entire dataset would estimate a single y-interce
 <br>
 
 # Data Analysis
-Visualization is an intuitive way to get the big picture (pun intended) of our data, but there is a standardized numerical metric we can use to justify the use of a multilevel model. The measurement is called the "intraclass correlation coefficient," or **ICC** for short. <br>
+Visualization is an intuitive way to get the big picture (pun intended) of our data, but there is a standardized metric we can use to justify the use of a multilevel model. The measurement is called the "intraclass correlation coefficient," or **ICC** for short. <br>
 <br>
 
 ## Intraclass correlation coefficient (ICC) 
@@ -122,7 +122,7 @@ In regression, a null model is usually the simplest possible model that includes
  
 First, load the necessary libraries. The model we want to use is a **mixed linear model** (***mixedlm***), from the ***statsmodel*** library.<br>
 
-Specify the null model, fit it, and then print the results. For this study, I will conduct a two-level mixed linear regression with **UHF42** neighborhoods as the Level 2 groups.<br>
+Specify the null model, fit it, and then print the results. For this study, I will conduct a two-level mixed linear regression, with **UHF42** neighborhoods as the Level 2 groups.<br>
 
 
 ```python
@@ -148,7 +148,7 @@ Using the **Between-Group Variance** and the **Within-Group Variance** estimated
 ## Cluster-mean centering
 It is worth noting that, for this multilevel regression, the HVI predictor was cluster-mean centered (also known as group-mean centered). In other words, the arithmetic mean of HVI for each cluster (UHF42 neighborhood) was subtracted from each observation’s HVI value in the corresponding neighborhood.<br>
 
-**Mean centering** is a technique used in linear regression models when predictors do not have meaningful zero points. In this study, HVI has no meaningful zero  because the Heat Vulnerability Index ranges from 1 to 5. Without centering it, the y-intercept would represent the average percentage of residents with poor physical health when HVI is zero, which is out of range for the index.<br>
+**Mean centering** is a popular technique used in linear regression models when predictors do not have meaningful zero points. In this study, HVI has no meaningful zero  because the Heat Vulnerability Index ranges from 1 to 5. Without centering it, the y-intercept would represent the average percentage of residents with poor physical health when HVI is zero, which is out of range for the index.<br>
 
 Other reasons for centering are to reduce multicollinearity and to simplify interpretations when interaction terms are included in the model.<br>
 
@@ -199,7 +199,7 @@ Conceptually, the two-level model can be specified as:<br>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 = γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>) * ***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
+    + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>)***HVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
 
 where **γ**s are **fixed-effects** and ***v<sub>0j</sub>*** and ***v<sub>1j</sub>*** are **random effects**<br>
 
@@ -207,7 +207,7 @@ In Python, each term in the mixed-effects model must be specified except for *e<
 
 The random effects are specified using the option **re_formula = "~1 + HVI"** where 1 and HVI specify that the coefficients vary for the grouping variable (i.e., UHF42 neighborhoods).<br>
 
-As a reminder, the HVI variable in this model is cluster-mean-centered and named HVI_CMC.<br>  
+As a reminder, the HVI variable in this model is cluster-mean-centered and named *HVI_CMC*.<br>  
 
 ```python
 model_2level = smf.mixedlm("PoorPhysicalHealthPercent ~ mHVI + Percent65plus + HVI_CMC + mHVI*HVI_CMC + Percent65plus*HVI_CMC", data=df, groups=df["UHF42"], re_formula="~1 + HVI_CMC")
@@ -240,7 +240,7 @@ The random-effects parameters are also shown and marked on the output. The indiv
 <br>
 
 # Results interpretations and implications
-The results show a clear positive relationship between HVI and the percentage of adult residents with poor physical health across **all neighborhoods**, though to varying degrees.<br>
+The results show a clear positive relationship between HVI and the percentage of adult residents with poor physical health across ***all neighborhoods***, though to varying degrees.<br>
 
 Neighborhoods with higher HVIs have a larger portion of their adult residents in poor physical health. However, it is the neighborhoods with low HVIs that will see a relatively larger increase in the proportion of their adult residents with poor physical health.<br>
 
