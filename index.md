@@ -195,9 +195,9 @@ Based on the output of the analysis, both **mHVI** and **Percent65plus** are **s
 
 ## Two-level model specification
 Conceptually, the two-level model can be specified as:<br>
-**Poor Health** = 𝛽<sub>0j</sub> + 𝛽<sub>1j</sub> ***mHVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
+**Poor Health** = 𝛽<sub>0j</sub> + 𝛽<sub>1j</sub>***mHVI<sub>ij</sub>*** + *e<sub>ij</sub>* <br>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-= γ<sub>0</sub> + γ<sub>1</sub> ***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
+= γ<sub>0</sub> + γ<sub>1</sub>***mHVI<sub>j</sub>*** + γ<sub>2</sub>***Age65<sub>j</sub>*** + *v<sub>0j</sub>* <br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     + (γ<sub>3</sub> + γ<sub>4</sub>***mHVI<sub>j</sub>*** + γ<sub>5</sub>***Age65<sub>j</sub>*** + *v<sub>1j</sub>) * ***HVI***<sub>ij</sub> + *e<sub>ij</sub>* <br>
 
